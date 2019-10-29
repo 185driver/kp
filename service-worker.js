@@ -1,33 +1,32 @@
-/**
- * Welcome to your Workbox-powered service worker!
- *
- * You'll need to register this file in your web app and you should
- * disable HTTP caching for this file too.
- * See https://goo.gl/nhQhGp
- *
- * The rest of the code is auto-generated. Please don't update this file
- * directly; instead, make changes to your Workbox build configuration
- * and re-run your build process.
- * See https://goo.gl/2aRDsh
- */
+importScripts("/kp/precache-manifest.ecf97945cb080cec77e8fdef74408e1c.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
+/* eslint-disable no-undef, no-underscore-dangle, no-restricted-globals */
 
-importScripts(
-  "/kp/precache-manifest.39c25db4c3b5059e33c9b1c526205fdf.js"
-);
+self.addEventListener('message', (e) => {
+  if (!e.data) {
+    return;
+  }
 
-workbox.skipWaiting();
-workbox.clientsClaim();
+  switch (e.data) {
+    case 'skipWaiting':
+      self.skipWaiting();
+      break;
+    default:
+      // NOOP
+      break;
+  }
+});
 
-/**
- * The workboxSW.precacheAndRoute() method efficiently caches and responds to
- * requests for URLs in the manifest.
- * See https://goo.gl/S9QRab
- */
+// Cleans up old precached data.
+workbox.precaching.cleanupOutdatedCaches();
+
+// Prefixes the cache name in the Dev Tools Cache Storage viewer.
+workbox.core.setCacheNameDetails({ prefix: 'kp-vue' });
+
+// Throws promise error in dev tools console if placed inside switch() above
+// as 'self.clients.claim()'. Works quite nicely here, however.
+workbox.core.clientsClaim();
+
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
-workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerRoute(/\.(?:woff|woff2)$/, workbox.strategies.cacheFirst({ "cacheName":"fonts", plugins: [new workbox.expiration.Plugin({"maxEntries":50,"maxAgeSeconds":2592000,"purgeOnQuotaError":true})] }), 'GET');
-workbox.routing.registerRoute(/\.(?:png|gif|jpg|jpeg|svg)$/, workbox.strategies.cacheFirst({ "cacheName":"images", plugins: [new workbox.expiration.Plugin({"maxEntries":50,"maxAgeSeconds":2592000,"purgeOnQuotaError":true})] }), 'GET');
